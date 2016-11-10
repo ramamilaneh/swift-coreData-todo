@@ -12,25 +12,35 @@ import CoreData
 class DetailViewController: UITableViewController {
     
     var task: Task!
+    var subtasks = [Subtask]()
+    let store = DataStore.sharedInstance
     
     override func viewDidLoad() {
         super.viewDidLoad()
         guard let title = task.content else { return }
         self.title = title
+       self.subtasks = self.task.subtasks?.allObjects as! [Subtask]
+      self.tableView.reloadData()
         
      
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+               self.tableView.reloadData()
+        
+    }
+    
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return subtasks.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "subtaskCell")
-        
-        
-        
+        if let unwrappedContent = self.subtasks[indexPath.row].content {
+            cell?.textLabel?.text = unwrappedContent
+        }
         cell?.backgroundColor = UIColor.randomColor
         return cell!
     }
@@ -65,9 +75,21 @@ class DetailViewController: UITableViewController {
     }
     
     func saveSubtask(titleString:String){
-       
+        
+      let manageContext = store.persistentContainer.viewContext
+        let subtask = Subtask(context: manageContext)
+        subtask.content = titleString
+        self.subtasks.append(subtask)
+        subtask.task = self.task
+        self.task.addToSubtasks(subtask)
+        store.saveContext()
+        
+        
+        
         
     }
+    
+   
     
     
     

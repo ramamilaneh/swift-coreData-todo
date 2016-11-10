@@ -20,7 +20,7 @@ class ViewController: UITableViewController {
         super.viewDidLoad()
         print("running")
         fetchData()
-        self.tableView.reloadData()
+       // self.tableView.reloadData()
         
         
     }
@@ -94,17 +94,8 @@ class ViewController: UITableViewController {
             guard let textField = alert.textFields?.first, let nameToSave = textField.text else {
                 return
             }
-            
-            
-            
-            self.saveTodo(titleString: nameToSave)
-            //self.todos.append(nameToSave)
-            
-            
-            
-            
-            
-            self.tableView.reloadData()
+        self.saveTodo(titleString: nameToSave)
+        self.tableView.reloadData()
         }
         
         let cancelAction = UIAlertAction(title: "Cancel",
@@ -138,9 +129,6 @@ class ViewController: UITableViewController {
         self.tableView.reloadData()
         
     }
-    
-    
-    
 }
 
 
